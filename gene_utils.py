@@ -22,7 +22,7 @@ def read_fasta_file(fasta_file):
                 name = words[0][1:]
                 seqs[name] = ""
             else:
-                seqs[name] = seqs[name] + line
+                seqs[name] += line
         return seqs
 
 def seq_lengths(seqs):
@@ -73,7 +73,7 @@ def longest_orf_in_seq(seq, frames=[0,1,2], use_rc=False):
     "Returns the longest orf tuple in sequence for all reading frames, 5' and 3'."
     rc_seq = reverse_complement(seq)
     max_orf = (-1,0)
-    for i in frames: #Fix this
+    for i in frames:
         long_orf = longest_frame_orf(seq, i)
         if long_orf[1] > max_orf[1]:
             max_orf = long_orf
@@ -89,6 +89,7 @@ def longest_orfs(seqs, frames=[0,1,2], use_rc=False):
     return sorted(orfs, key=lambda tup: tup[1][1])
 
 def repeats(seqs, n):
+    "Returns sorted list of repeats of length n [(seq, num_of_repeats_found)]."
     sub_seqs = {}
     for seq in seqs.values():
         for i in range(len(seq)):
@@ -96,7 +97,7 @@ def repeats(seqs, n):
             if len(sub_seq) != n:
                 break
             if sub_seq in sub_seqs:
-                sub_seqs[sub_seq] = sub_seqs[sub_seq] + 1
+                sub_seqs[sub_seq] += 1
             else:
                 sub_seqs[sub_seq] = 1
     sub_tups = [(seq, sub_seqs[seq]) for seq in sub_seqs]
